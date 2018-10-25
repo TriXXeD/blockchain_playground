@@ -2,13 +2,33 @@ package Classes;
 
 import Helpers.StringHelper;
 import com.google.gson.GsonBuilder;
+
+import java.security.Security;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ScrubChain {
     public static ArrayList<Block> scrubChain = new ArrayList<>();
-    public static int difficulty = 6;
+    public static HashMap<String, TransactionOutput> UTXOs = new HashMap<>(); //Unspent transactions to be used as input
+    public static int difficulty = 5;
+    public static float minimumTransaction = 0.1f;
 
     public static void main(String[] args){
+        //Setup bouncy castle as Security Provider
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        //Initialize wallets
+        Wallet walletA = new Wallet();
+        Wallet walletB = new Wallet();
+        //Test keys
+        System.out.println("Private and Public Key");
+        System.out.println(StringHelper.getStringKeyFrom(walletA.getPrivateKey()));
+        System.out.println(StringHelper.getStringKeyFrom(walletA.publicKey));
+        //Creating a transaction from A to B
+        Transaction transaction = new Transaction(walletA.publicKey, walletB.publicKey, 5, null);
+        transaction.generateSignature(walletA.getPrivateKey());
+        //Verify the signature
+        System.out.println("Is signature verified?: " + transaction.verifySignature());
+
         //Making a chain
         addBlock(new Block("OG block", "0"));
         addBlock(new Block("Firstborn", scrubChain.get(scrubChain.size()-1).getHash()));
