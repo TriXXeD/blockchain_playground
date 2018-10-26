@@ -1,7 +1,10 @@
 package Helpers;
 
+import Classes.Transaction;
+
 import java.io.UnsupportedEncodingException;
 import java.security.*;
+import java.util.ArrayList;
 import java.util.Base64;
 
 public class StringHelper {
@@ -54,6 +57,27 @@ public class StringHelper {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    //Merkle Root Helper
+    public static String getMerkleRoot(ArrayList<Transaction> transactions){
+        int layer_node_cnt = transactions.size();
+        ArrayList<String> prevTreeLayer = new ArrayList<>(); //List of hashes from prev layer
+
+        for(Transaction transaction: transactions){
+            prevTreeLayer.add(transaction.transactionId);
+        }
+        ArrayList<String> treeLayer = prevTreeLayer; //TODO: figure this out
+        while(layer_node_cnt > 1) {
+            treeLayer = new ArrayList<String>();
+            for(int i=1; i < prevTreeLayer.size(); i++){
+                treeLayer.add(ApplySha256(prevTreeLayer.get(i-1) + prevTreeLayer.get(i))); //hashes the two child hashes
+            }
+            layer_node_cnt = treeLayer.size();
+            prevTreeLayer = treeLayer;
+        }
+        return treeLayer.size() == 1 ? treeLayer.get(0) : "";
+
     }
 
     public static String getStringKeyFrom(Key key) {

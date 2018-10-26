@@ -2,7 +2,6 @@ package Classes;
 
 import Helpers.StringHelper;
 
-import javax.script.ScriptContext;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -61,13 +60,13 @@ public class Transaction {
             i.UTXO = ScrubChain.UTXOs.get(i.transactionOutpuId);
         }
 
-        if(getInputsValue() < ScrubChain.minimumTransaction) {
+        if(getInputsSum() < ScrubChain.minimumTransaction) {
             System.out.println("Transaction too small");
             return false;
         }
 
         //Generate transaction output
-        float leftover = getInputsValue() - value; //get value of inputs, then the left over change
+        float leftover = getInputsSum() - value; //get value of inputs, then the left over change
         transactionId = createHash();
         outputs.add(new TransactionOutput(this.receiver, value, transactionId));
         outputs.add(new TransactionOutput(this.sender, leftover, transactionId));
@@ -87,7 +86,7 @@ public class Transaction {
     }
 
     //returns sum of inputs(UTXOs) values
-    public float getInputsValue() {
+    public float getInputsSum() {
         float total = 0;
         for(TransactionInput i : inputs) {
             if(i.UTXO == null) continue; //if Transaction can't be found skip it
@@ -97,11 +96,9 @@ public class Transaction {
     }
 
     //returns sum of outputs:
-    public float getOutputsValue() {
+    public float getOutputsSum() {
         float total = 0;
-        for(TransactionOutput o : outputs) {
-            total += o.value;
-        }
+        for(TransactionOutput o : outputs) total += o.value;
         return total;
     }
 }
