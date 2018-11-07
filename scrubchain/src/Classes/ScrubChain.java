@@ -35,7 +35,7 @@ public class ScrubChain {
         genesis.addTransaction(genesisTransaction);
         addBlock(genesis);
 
-        //Testing
+        //Interacting with the chain
         Block adam = new Block(scrubChain.get(scrubChain.size()-1).getHash());
         System.out.println("\nWallet A balance: " + walletA.getBalance() + "\nAttempting transfer to B");
         adam.addTransaction(walletA.useMoney(walletB.publicKey, 13.37f));
