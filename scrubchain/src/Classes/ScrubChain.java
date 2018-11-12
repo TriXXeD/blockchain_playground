@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class ScrubChain {
     public static ArrayList<Block> scrubChain = new ArrayList<>();
     public static HashMap<String, TransactionOutput> UTXOs = new HashMap<>(); //Unspent transactions to be used as input
-    public static int difficulty = 5;
+    public static int difficulty = 7;
     public static float minimumTransaction = 0.1f;
     public static Transaction genesisTransaction;
 

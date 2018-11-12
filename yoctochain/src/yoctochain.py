@@ -28,7 +28,7 @@ def new_block(latest_block):
     this_index = latest_block.index + 1
     this_timestamp = date.datetime.now()
     this_data = "Block #" + str(this_index)
-    this_prv_hash = latest_block.prv_hash
+    this_prv_hash = latest_block.hash
     return Block(this_index, this_timestamp, this_data, this_prv_hash)
 
 
